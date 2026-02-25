@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="mb-3">
+  <h2 class="mb-1">Dashboard</h2>
+  <p class="text-muted mb-0">Track risks, tasks, incidents, and documentation reviews.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6 col-xl-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Open Risks</div>
+        <div class="display-6">{{ open_risks }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">High/Critical Risks</div>
+        <div class="display-6">{{ high_risks }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Overdue Tasks</div>
+        <div class="display-6">{{ overdue_tasks }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-xl-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="text-muted">Open Incidents</div>
+        <div class="display-6">{{ open_incidents }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white fw-semibold">Recent Risks</div>
+      <div class="card-body table-responsive">
+        <table class="table table-sm">
+          <thead><tr><th>Title</th><th>Severity</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for r in risks %}
+              <tr><td>{{ r.title }}</td><td>{{ r.severity }}</td><td>{{ r.status }}</td></tr>
+            {% else %}
+              <tr><td colspan="3" class="text-muted">No risks yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('risks') }}">Manage Risks</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white fw-semibold">Recent Tasks</div>
+      <div class="card-body table-responsive">
+        <table class="table table-sm">
+          <thead><tr><th>Task</th><th>Priority</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for t in tasks %}
+              <tr><td>{{ t.title }}</td><td>{{ t.priority }}</td><td>{{ t.status }}</td></tr>
+            {% else %}
+              <tr><td colspan="3" class="text-muted">No tasks yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('tasks') }}">Manage Tasks</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white fw-semibold">Recent Incidents</div>
+      <div class="card-body table-responsive">
+        <table class="table table-sm">
+          <thead><tr><th>Title</th><th>Severity</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for i in incidents %}
+              <tr><td>{{ i.title }}</td><td>{{ i.severity }}</td><td>{{ i.status }}</td></tr>
+            {% else %}
+              <tr><td colspan="3" class="text-muted">No incidents yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('incidents') }}">Manage Incidents</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-white fw-semibold">Docs Review Due Soon (30 days)</div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="text-muted">Reviews due soon</span>
+          <span class="fs-3 fw-bold">{{ review_soon }}</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead><tr><th>Document</th><th>Next Review</th></tr></thead>
+            <tbody>
+              {% for d in documents %}
+                <tr><td>{{ d.name }}</td><td>{{ d.next_review or "-" }}</td></tr>
+              {% else %}
+                <tr><td colspan="2" class="text-muted">No documents yet.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <a class="btn btn-outline-primary btn-sm" href="{{ url_for('documents') }}">Manage Docs</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

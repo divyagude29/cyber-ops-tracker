@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-3">Task Tracker</h2>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-white fw-semibold">Add Task</div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('add_task') }}">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Title</label>
+          <input class="form-control" name="title" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Category</label>
+          <input class="form-control" name="category" placeholder="IAM/Network/etc">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Assignee</label>
+          <input class="form-control" name="assignee" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Due Date</label>
+          <input class="form-control" type="date" name="due_date">
+        </div>
+        <div class="col-md-1">
+          <label class="form-label">Priority</label>
+          <select class="form-select" name="priority">
+            <option>Low</option><option>Medium</option><option>High</option>
+          </select>
+        </div>
+        <div class="col-md-1">
+          <label class="form-label">Status</label>
+          <select class="form-select" name="status">
+            <option>Open</option><option>In Progress</option><option>Closed</option>
+          </select>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Notes</label>
+          <input class="form-control" name="notes" placeholder="follow-up notes">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-3">Add Task</button>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header bg-white fw-semibold">All Tasks</div>
+  <div class="card-body table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th><th>Title</th><th>Category</th><th>Assignee</th><th>Due</th><th>Priority</th><th>Status</th><th width="90">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tasks %}
+        <tr>
+          <td>{{ t.id }}</td>
+          <td>{{ t.title }}</td>
+          <td>{{ t.category or "-" }}</td>
+          <td>{{ t.assignee }}</td>
+          <td>{{ t.due_date or "-" }}</td>
+          <td>{{ t.priority }}</td>
+          <td>{{ t.status }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_task', item_id=t.id) }}" onsubmit="return confirm('Delete this task?');">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-muted text-center">No tasks yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

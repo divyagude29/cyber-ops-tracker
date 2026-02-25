@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-3">Documentation Tracker</h2>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-white fw-semibold">Add Document</div>
+  <div class="card-body">
+    <form method="POST" action="{{ url_for('add_document') }}">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Name</label>
+          <input class="form-control" name="name" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Type</label>
+          <select class="form-select" name="doc_type">
+            <option>Procedure</option><option>Policy</option><option>Report</option><option>Reference</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Owner</label>
+          <input class="form-control" name="owner" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Version</label>
+          <input class="form-control" name="version" placeholder="v1.0" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Last Updated</label>
+          <input class="form-control" type="date" name="last_updated" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Next Review</label>
+          <input class="form-control" type="date" name="next_review">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-3">Add Document</button>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header bg-white fw-semibold">All Documents</div>
+  <div class="card-body table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th><th>Name</th><th>Type</th><th>Owner</th><th>Version</th><th>Last Updated</th><th>Next Review</th><th width="90">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in documents %}
+        <tr>
+          <td>{{ d.id }}</td>
+          <td>{{ d.name }}</td>
+          <td>{{ d.doc_type }}</td>
+          <td>{{ d.owner }}</td>
+          <td>{{ d.version }}</td>
+          <td>{{ d.last_updated }}</td>
+          <td>{{ d.next_review or "-" }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_document', item_id=d.id) }}" onsubmit="return confirm('Delete this document?');">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-muted text-center">No documents yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
